@@ -169,7 +169,13 @@ TVECTOR Vector_Scalar_Multiply(TVECTOR v, float s)
 TVECTOR Vector_Negate(TVECTOR v)
 {
 	// TODO LAB 1: Replace with your implementation.
-	return v;
+	TVECTOR temp;
+	for (int i = 0; i < 4; ++i)
+	{
+		temp.e[i] = v.e[i] * -1;
+	}
+
+	return temp;
 }
 
 // Perform a Dot Product on two TVECTOR's
@@ -182,9 +188,13 @@ TVECTOR Vector_Negate(TVECTOR v)
 // NOTE:	Use's all four components
 float Vector_Dot(TVECTOR v, TVECTOR w)
 {
-	  
 	// TODO LAB 1: Replace with your implementation.
-	return  1.0;
+	float dotProduct = 0.0F;
+	for (int i = 0; i < 4; ++i)
+	{
+		dotProduct += v.e[i] * w.e[i];
+	}
+	return  dotProduct;
 }
 
 // Perform a Cross Product on two TVECTOR's
