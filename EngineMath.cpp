@@ -88,6 +88,16 @@ float Radians_To_Degrees(float Rad)
 bool Vector_IsEqual(TVECTOR v, TVECTOR w)
 {
 	// TODO LAB 1: Replace with your implementation.
+	if (v.w == w.w)
+		if(v.x == w.x)
+			if(v.y == w.y)
+				if(v.z == w.z)
+					return true;
+	if (IsEqual(v.w, w.w))
+		if (IsEqual(v.x, w.x))
+			if (IsEqual(v.y, v.y))
+				if (IsEqual(v.z, w.z))
+					return true;
 	return false;
 }
 
@@ -102,9 +112,13 @@ bool Vector_IsEqual(TVECTOR v, TVECTOR w)
 TVECTOR Vector_Add(TVECTOR v, TVECTOR w)
 {
 	// TODO LAB 1: Replace with your implementation.
+	TVECTOR temp;
+	for (int i = 0; i < 4; ++i)
+	{
+		temp.e[i] = v.e[i] + w.e[i];
+	}
 	
-	
-	return v;
+	return temp;
 }
 
 // SUBTRACT one TVECTOR from another
@@ -118,7 +132,13 @@ TVECTOR Vector_Add(TVECTOR v, TVECTOR w)
 TVECTOR Vector_Sub(TVECTOR v, TVECTOR w)
 {
 	// TODO LAB 1: Replace with your implementation.
-	return v;
+	TVECTOR temp;
+	for (int i = 0; i < 4; ++i)
+	{
+		temp.e[i] = v.e[i] - w.e[i];
+	}
+
+	return temp;
 }
 
 // MULTIPLY all four components of a TVECTOR by a scalar
@@ -130,7 +150,13 @@ TVECTOR Vector_Sub(TVECTOR v, TVECTOR w)
 TVECTOR Vector_Scalar_Multiply(TVECTOR v, float s)
 {
 	// TODO LAB 1: Replace with your implementation.
-	return v;
+	TVECTOR temp;
+	for (int i = 0; i < 4; ++i)
+	{
+		temp.e[i] = v.e[i] * s;
+	}
+
+	return temp;
 }
 
 // NEGATE all the components of a TVECTOR
