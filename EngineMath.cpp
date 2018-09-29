@@ -209,7 +209,12 @@ float Vector_Dot(TVECTOR v, TVECTOR w)
 TVECTOR Vector_Cross(TVECTOR v, TVECTOR w)
 {
 	// TODO LAB 1: Replace with your implementation.
-	return v;
+	TVECTOR result;
+	result.x = v.y * w.z - v.z * w.y;
+	result.y = v.z * w.x - v.x * w.z;
+	result.z = v.x * w.y - v.y * w.x;
+	result.w = 0;
+	return result;
 }
 
 // Find the squared length of a TVECTOR
@@ -222,7 +227,8 @@ TVECTOR Vector_Cross(TVECTOR v, TVECTOR w)
 float Vector_LengthSq(TVECTOR v)
 {
 	// TODO LAB 1: Replace with your implementation.
-	return 0;
+	float squared = powf(v.x, 2.0F) + powf(v.y, 2.0F) + powf(v.z, 2.0F) + powf(v.w, 2.0F);
+	return squared;
 }
 
 // Find the length of a TVECTOR
@@ -235,7 +241,8 @@ float Vector_LengthSq(TVECTOR v)
 float Vector_Length(TVECTOR v)
 {
 	// TODO LAB 1: Replace with your implementation.
-	return 0;
+
+	return sqrtf(Vector_LengthSq(v));
 }
 
 // Normalize a TVECTOR
@@ -248,6 +255,16 @@ float Vector_Length(TVECTOR v)
 TVECTOR Vector_Normalize(TVECTOR v)
 {
 	// TODO LAB 1: Replace with your implementation.
+	TVECTOR temp;
+	if (IsZero(Vector_Length(v)))
+	{
+		temp.x = 0;
+		temp.y = 0;
+		temp.z = 0;
+		temp.w = 0;
+		return temp;
+	}
+
 	return v;
 }
 
