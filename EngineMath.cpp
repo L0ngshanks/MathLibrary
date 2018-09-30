@@ -258,14 +258,16 @@ TVECTOR Vector_Normalize(TVECTOR v)
 	TVECTOR temp;
 	if (IsZero(Vector_Length(v)))
 	{
-		temp.x = 0;
-		temp.y = 0;
-		temp.z = 0;
-		temp.w = 0;
-		return temp;
+		for (int i = 0; i < 4; ++i)
+			temp.e[i] = 0;
 	}
-
-	return v;
+	else
+	{
+		for (int i = 0; i < 4; ++i)
+			temp.e[i] = v.e[i] / Vector_Length(v);
+	}
+		
+	return temp;
 }
 
 // Makes a TVECTOR's w-component normalized
@@ -280,6 +282,20 @@ TVECTOR Vector_Normalize(TVECTOR v)
 TVECTOR Vector_Homogenise(TVECTOR v)
 {
 	// TODO LAB 1: Replace with your implementation.
+	//TVECTOR temp;
+	if (IsZero(v.w))
+	{
+		for (int i = 0; i < 4; ++i)
+			v.e[i] = 0;
+	}
+	else if (v.w > 1)
+	{
+		v.w = v.w / v.w;
+		v.x = v.x / v.w;
+		v.y = v.y / v.w;
+		v.z = v.z / v.w;
+	}
+		
 	return v;
 }
 
@@ -294,7 +310,12 @@ TVECTOR Vector_Homogenise(TVECTOR v)
 TVECTOR Vector_Maximize(TVECTOR v, TVECTOR w)
 {
 	// TODO LAB 1: Replace with your implementation.
-	return v;
+	TVECTOR temp;
+	temp.w = Max(v.w, w.w);
+	temp.x = Max(v.x, w.x);
+	temp.y = Max(v.y, w.y);
+	temp.z = Max(v.z, w.z);
+	return temp;
 }
 
 // Get a TVECTOR made from the minimum components of two TVECTOR's
@@ -308,7 +329,12 @@ TVECTOR Vector_Maximize(TVECTOR v, TVECTOR w)
 TVECTOR Vector_Minimize(TVECTOR v, TVECTOR w)
 {
 	// TODO LAB 1: Replace with your implementation.
-	return v;
+	TVECTOR temp;
+	temp.w = Min(v.w, w.w);
+	temp.x = Min(v.x, w.x);
+	temp.y = Min(v.y, w.y);
+	temp.z = Min(v.z, w.z);
+	return temp;
 }
 
 // Get a TVECTOR made from the average of two TVECTORs
@@ -323,7 +349,12 @@ TVECTOR Vector_Minimize(TVECTOR v, TVECTOR w)
 TVECTOR Vector_Average(TVECTOR v, TVECTOR w)
 {
 	// TODO LAB 1: Replace with your implementation.
-	return v;
+	TVECTOR temp;
+	temp.x = (v.x + w.x) / 2;
+	temp.y = (v.y + w.y) / 2;
+	temp.z = (v.z + w.z) / 2;
+	temp.w = (v.w + w.w) / 2;
+	return temp;
 }
 
 // Find the angle between two TVECTORs
@@ -338,7 +369,19 @@ TVECTOR Vector_Average(TVECTOR v, TVECTOR w)
 float Vector_AngleBetween(TVECTOR v, TVECTOR w)
 {
 	// TODO LAB 1: Replace with your implementation.
-	return 0;
+	float degrees;
+	float addV = v.x + v.y + v.z;
+	float addW = w.x + w.y + w.z;
+	if (IsZero(addV) || IsZero(addW))
+	{
+		return 0;
+	}
+	else
+	{
+		float radians = acosf(Vector_Dot(v, w) / (Vector_Length(v) * Vector_Length(w)));
+		degrees = radians * 180 / (float)(4 * atan(1));
+	}
+	return degrees;
 }
 
 // Get the distance one TVECTOR points in the direction of another
@@ -353,7 +396,15 @@ float Vector_AngleBetween(TVECTOR v, TVECTOR w)
 float Vector_Component(TVECTOR v, TVECTOR w)
 {
 	// TODO LAB 1: Replace with your implementation.
-	return 0;
+	float addW = w.x + w.y + w.z;
+	float vec_Comp;
+	if (IsZero(addW))
+		return 0;
+	else
+	{
+		vec_Comp = Vector_Dot(v, Vector_Normalize(w));
+	}
+	return vec_Comp;
 }
 
 // Get the TVECTOR that represents v projected on w.
@@ -367,7 +418,22 @@ float Vector_Component(TVECTOR v, TVECTOR w)
 TVECTOR Vector_Project(TVECTOR v, TVECTOR w)
 {
 	// TODO LAB 1: Replace with your implementation.
-	return v;
+	TVECTOR temp;
+	float addW = w.x + w.y + w.z;
+	if (IsZero(addW))
+	{
+		temp.x = 0;
+		temp.y = 0;
+		temp.z = 0;
+	}
+	else
+	{
+		temp.x = (Vector_Dot(v, w) / powf(Vector_LengthSq(w), 2)) * w.x;
+		temp.y = (Vector_Dot(v, w) / powf(Vector_LengthSq(w), 2)) * w.y;
+		temp.z = (Vector_Dot(v, w) / powf(Vector_LengthSq(w), 2)) * w.z;
+	}
+
+	return  temp;
 }
 
 ////////////////////////////////////////////////////////////////////////
