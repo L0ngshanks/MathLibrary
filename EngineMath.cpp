@@ -88,17 +88,15 @@ float Radians_To_Degrees(float Rad)
 bool Vector_IsEqual(TVECTOR v, TVECTOR w)
 {
 	// TODO LAB 1: Replace with your implementation.
-	if (v.w == w.w)
-		if(v.x == w.x)
-			if(v.y == w.y)
-				if(v.z == w.z)
-					return true;
-	if (IsEqual(v.w, w.w))
-		if (IsEqual(v.x, w.x))
-			if (IsEqual(v.y, v.y))
-				if (IsEqual(v.z, w.z))
-					return true;
-	return false;
+	if (!IsEqual(v.x, w.x))
+		return false;
+	if (!IsEqual(v.y, w.y))
+		return false;
+	if (!IsEqual(v.z, w.z))
+		return false;
+	if (!IsEqual(v.w, w.w))
+		return false;
+	return true;
 }
 
 // ADD two TVECTOR's togother
@@ -112,13 +110,12 @@ bool Vector_IsEqual(TVECTOR v, TVECTOR w)
 TVECTOR Vector_Add(TVECTOR v, TVECTOR w)
 {
 	// TODO LAB 1: Replace with your implementation.
-	TVECTOR temp;
-	for (int i = 0; i < 4; ++i)
-	{
-		temp.e[i] = v.e[i] + w.e[i];
-	}
-	
-	return temp;
+	v.x += w.x;
+	v.y += w.y;
+	v.z += w.z;
+	v.w += w.w;
+
+	return v;
 }
 
 // SUBTRACT one TVECTOR from another
@@ -132,13 +129,13 @@ TVECTOR Vector_Add(TVECTOR v, TVECTOR w)
 TVECTOR Vector_Sub(TVECTOR v, TVECTOR w)
 {
 	// TODO LAB 1: Replace with your implementation.
-	TVECTOR temp;
-	for (int i = 0; i < 4; ++i)
-	{
-		temp.e[i] = v.e[i] - w.e[i];
-	}
 
-	return temp;
+	v.x -= w.x;
+	v.y -= w.y;
+	v.z -= w.z;
+	v.w -= w.w;
+
+	return v;
 }
 
 // MULTIPLY all four components of a TVECTOR by a scalar
@@ -150,13 +147,20 @@ TVECTOR Vector_Sub(TVECTOR v, TVECTOR w)
 TVECTOR Vector_Scalar_Multiply(TVECTOR v, float s)
 {
 	// TODO LAB 1: Replace with your implementation.
-	TVECTOR temp;
-	for (int i = 0; i < 4; ++i)
-	{
-		temp.e[i] = v.e[i] * s;
-	}
+	//TVECTOR temp;
+	//for (int i = 0; i < 4; ++i)
+	//{
+	//	temp.e[i] = v.e[i] * s;
+	//}
 
-	return temp;
+	//return temp;
+
+	v.x *= s;
+	v.y *= s;
+	v.z *= s;
+	v.w *= s;
+
+	return v;
 }
 
 // NEGATE all the components of a TVECTOR
@@ -169,13 +173,13 @@ TVECTOR Vector_Scalar_Multiply(TVECTOR v, float s)
 TVECTOR Vector_Negate(TVECTOR v)
 {
 	// TODO LAB 1: Replace with your implementation.
-	TVECTOR temp;
-	for (int i = 0; i < 4; ++i)
-	{
-		temp.e[i] = v.e[i] * -1;
-	}
+	
+	v.x *= -1;
+	v.y *= -1;
+	v.z *= -1;
+	v.w *= -1;
 
-	return temp;
+	return v;
 }
 
 // Perform a Dot Product on two TVECTOR's
@@ -190,10 +194,12 @@ float Vector_Dot(TVECTOR v, TVECTOR w)
 {
 	// TODO LAB 1: Replace with your implementation.
 	float dotProduct = 0.0F;
-	for (int i = 0; i < 4; ++i)
-	{
-		dotProduct += v.e[i] * w.e[i];
-	}
+
+	dotProduct += v.x * w.x;
+	dotProduct += v.y * w.y;
+	dotProduct += v.z * w.z;
+	dotProduct += v.w * w.w;
+
 	return  dotProduct;
 }
 
@@ -227,7 +233,7 @@ TVECTOR Vector_Cross(TVECTOR v, TVECTOR w)
 float Vector_LengthSq(TVECTOR v)
 {
 	// TODO LAB 1: Replace with your implementation.
-	float squared = powf(v.x, 2.0F) + powf(v.y, 2.0F) + powf(v.z, 2.0F) + powf(v.w, 2.0F);
+	float squared = (v.x * v.x) + (v.y * v.y) + (v.z * v.z) + (v.w * v.w);
 	return squared;
 }
 
@@ -254,18 +260,22 @@ float Vector_Length(TVECTOR v)
 // NOTE:	Use's all four components
 TVECTOR Vector_Normalize(TVECTOR v)
 {
-	// TODO LAB 1: Replace with your implementation.
+
 	TVECTOR temp;
+	// TODO LAB 1: Replace with your implementation.
 	if (IsZero(Vector_Length(v)))
 	{
-		for (int i = 0; i < 4; ++i)
-			temp.e[i] = 0;
+		v.x = 0;
+		v.y = 0;
+		v.z = 0;
+
+		return v;
 	}
-	else
-	{
-		for (int i = 0; i < 4; ++i)
-			temp.e[i] = v.e[i] / Vector_Length(v);
-	}
+
+	temp.x = v.x / Vector_Length(v);
+	temp.y = v.y / Vector_Length(v);
+	temp.z = v.z / Vector_Length(v);
+	temp.w = v.w / Vector_Length(v);
 		
 	return temp;
 }
@@ -285,17 +295,19 @@ TVECTOR Vector_Homogenise(TVECTOR v)
 	//TVECTOR temp;
 	if (IsZero(v.w))
 	{
-		for (int i = 0; i < 4; ++i)
-			v.e[i] = 0;
+		v.x = 0;
+		v.y = 0;
+		v.z = 0;
+		v.w = 0;
+
+		return v;
 	}
-	else if (v.w > 1)
-	{
-		v.w = v.w / v.w;
-		v.x = v.x / v.w;
-		v.y = v.y / v.w;
-		v.z = v.z / v.w;
-	}
-		
+
+	v.x = v.x / v.w;
+	v.y = v.y / v.w;
+	v.z = v.z / v.w;
+	v.w = v.w / v.w;
+
 	return v;
 }
 
@@ -369,19 +381,17 @@ TVECTOR Vector_Average(TVECTOR v, TVECTOR w)
 float Vector_AngleBetween(TVECTOR v, TVECTOR w)
 {
 	// TODO LAB 1: Replace with your implementation.
-	float degrees;
+	float radians;
 	float addV = v.x + v.y + v.z;
 	float addW = w.x + w.y + w.z;
 	if (IsZero(addV) || IsZero(addW))
 	{
 		return 0;
 	}
-	else
-	{
-		float radians = acosf(Vector_Dot(v, w) / (Vector_Length(v) * Vector_Length(w)));
-		degrees = radians * 180 / (float)(4 * atan(1));
-	}
-	return degrees;
+
+	radians = acosf(Vector_Dot(v, w) / (Vector_Length(v) * Vector_Length(w)));
+	
+	return Radians_To_Degrees(radians);
 }
 
 // Get the distance one TVECTOR points in the direction of another
@@ -398,12 +408,12 @@ float Vector_Component(TVECTOR v, TVECTOR w)
 	// TODO LAB 1: Replace with your implementation.
 	float addW = w.x + w.y + w.z;
 	float vec_Comp;
+
 	if (IsZero(addW))
 		return 0;
-	else
-	{
-		vec_Comp = Vector_Dot(v, Vector_Normalize(w));
-	}
+
+	vec_Comp = Vector_Dot(v, Vector_Normalize(w));
+	
 	return vec_Comp;
 }
 
@@ -419,19 +429,22 @@ TVECTOR Vector_Project(TVECTOR v, TVECTOR w)
 {
 	// TODO LAB 1: Replace with your implementation.
 	TVECTOR temp;
-	float addW = w.x + w.y + w.z;
-	if (IsZero(addW))
+	float addW = w.x + w.y + w.z + v.w;
+	float addV = v.x + v.y + v.z + v.w;
+
+	if (IsZero(addW) || IsZero(addV))
 	{
 		temp.x = 0;
 		temp.y = 0;
 		temp.z = 0;
+		temp.w = 0;
+		return temp;
 	}
-	else
-	{
-		temp.x = (Vector_Dot(v, w) / powf(Vector_LengthSq(w), 2)) * w.x;
-		temp.y = (Vector_Dot(v, w) / powf(Vector_LengthSq(w), 2)) * w.y;
-		temp.z = (Vector_Dot(v, w) / powf(Vector_LengthSq(w), 2)) * w.z;
-	}
+
+	temp.x = (Vector_Dot(v, w) / Vector_LengthSq(w)) * w.x;
+	temp.y = (Vector_Dot(v, w) / Vector_LengthSq(w)) * w.y;
+	temp.z = (Vector_Dot(v, w) / Vector_LengthSq(w)) * w.z;
+	temp.w = (Vector_Dot(v, w) / Vector_LengthSq(w)) * w.w;
 
 	return  temp;
 }
@@ -452,7 +465,28 @@ TVECTOR Vector_Project(TVECTOR v, TVECTOR w)
 TVECTOR Vector_Reflect(TVECTOR v, TVECTOR w)
 {
 	// TODO LAB 2: Replace with your implementation.
-	return v;
+	TVECTOR temp;
+
+	float addW = w.x + w.y + w.z + w.w;
+
+	if (IsZero(addW))
+	{
+		v.x *= -1;
+		v.y *= -1;
+		v.z *= -1;
+		v.w *= -1;
+
+		return v;
+	}
+
+	temp = Vector_Sub(v, Vector_Scalar_Multiply(Vector_Project(v, Vector_Normalize(w)), 2));
+
+	temp.x *= -1;
+	temp.y *= -1;
+	temp.z *= -1;
+	temp.w *= -1;
+
+	return temp;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -466,9 +500,22 @@ TMATRIX Matrix_Zero(void)
 {
 	// TODO LAB 2: Replace with your implementation.
 	TMATRIX m;
-	m._e11 = 11;
-	m._e14 = 14;
-	m._e23 = 23;
+	m._e11 = 0;
+	m._e12 = 0;
+	m._e13 = 0;
+	m._e14 = 0;
+	m._e21 = 0;
+	m._e22 = 0;
+	m._e23 = 0;
+	m._e24 = 0;
+	m._e31 = 0;
+	m._e32 = 0;
+	m._e33 = 0;
+	m._e34 = 0;
+	m._e41 = 0;
+	m._e42 = 0;
+	m._e43 = 0;
+	m._e44 = 0;
 
 	return m;
 }
@@ -479,7 +526,11 @@ TMATRIX Matrix_Zero(void)
 TMATRIX Matrix_Identity(void)
 {
 	// TODO LAB 2: Replace with your implementation.
-	TMATRIX m = { 1, };
+	TMATRIX m = {1, 0, 0, 0,
+				0, 1, 0, 0,
+				0, 0, 1, 0,
+				0, 0, 0, 1};
+
 	return m;
 }
 
@@ -493,7 +544,11 @@ TMATRIX Matrix_Identity(void)
 TMATRIX Matrix_Create_Translation(float x, float y, float z)
 {
 	// TODO LAB 2: Replace with your implementation.
-	TMATRIX m = { 1, };
+	TMATRIX m = Matrix_Identity();
+	m._e14 = x;
+	m._e24 = y;
+	m._e34 = z;
+	m._e44 = 1;
 	return m;
 }
 
@@ -507,7 +562,11 @@ TMATRIX Matrix_Create_Translation(float x, float y, float z)
 TMATRIX Matrix_Create_Scale(float x, float y, float z)
 {
 	// TODO LAB 2: Replace with your implementation.
-	TMATRIX m = { 1, };
+	TMATRIX m = Matrix_Identity();
+	m._e11 *= x;
+	m._e22 *= y;
+	m._e33 *= z;
+	m._e44 *= 1;
 	return m;
 }
 
@@ -519,7 +578,14 @@ TMATRIX Matrix_Create_Scale(float x, float y, float z)
 TMATRIX Matrix_Create_Rotation_X(float Deg)
 {
 	// TODO LAB 2: Replace with your implementation.
-	TMATRIX m = { 1, };
+	float theta = Degrees_To_Radians(Deg);
+	TMATRIX m = Matrix_Identity();
+
+	m._e11 = 1;
+	m._e22 = cosf(theta);
+	m._e23 = -1 * sinf(theta);
+	m._e32 = sinf(theta);
+	m._e33 = cosf(theta);
 	return m;
 }
 
@@ -531,7 +597,15 @@ TMATRIX Matrix_Create_Rotation_X(float Deg)
 TMATRIX Matrix_Create_Rotation_Y(float Deg)
 {
 	// TODO LAB 2: Replace with your implementation.
-	TMATRIX m = { 1, };
+	float theta = Degrees_To_Radians(Deg);
+	TMATRIX m = Matrix_Identity();
+
+	m._e11 = cos(theta);
+	m._e13 = sin(theta);
+	m._e22 = 1;
+	m._e31 = -1 * sin(theta);
+	m._e33 = cos(theta);
+
 	return m;
 }
 
@@ -543,7 +617,14 @@ TMATRIX Matrix_Create_Rotation_Y(float Deg)
 TMATRIX Matrix_Create_Rotation_Z(float Deg)
 {
 	// TODO LAB 2: Replace with your implementation.
-	TMATRIX m = { 1, };
+	float theta = Degrees_To_Radians(Deg);
+	TMATRIX m = Matrix_Identity();
+
+	m._e11 = cos(theta);
+	m._e12 = -1 * sin(theta);
+	m._e21 = sin(theta);
+	m._e22 = cos(theta);
+
 	return m;
 }
 
@@ -556,6 +637,26 @@ TMATRIX Matrix_Create_Rotation_Z(float Deg)
 TMATRIX Matrix_Matrix_Add(TMATRIX m, TMATRIX n)
 {
 	// TODO LAB 2: Replace with your implementation.
+	m._e11 += n._e11;
+	m._e12 += n._e12;
+	m._e13 += n._e13;
+	m._e14 += n._e14;
+
+	m._e21 += n._e21;
+	m._e22 += n._e22;
+	m._e23 += n._e23;
+	m._e24 += n._e24;
+
+	m._e31 += n._e31;
+	m._e32 += n._e32;
+	m._e33 += n._e33;
+	m._e34 += n._e34;
+
+	m._e41 += n._e41;
+	m._e42 += n._e42;
+	m._e43 += n._e43;
+	m._e44 += n._e44;
+
 	return m;
 }
 
@@ -568,6 +669,26 @@ TMATRIX Matrix_Matrix_Add(TMATRIX m, TMATRIX n)
 TMATRIX Matrix_Matrix_Sub(TMATRIX m, TMATRIX n)
 {
 	// TODO LAB 2: Replace with your implementation.
+	m._e11 -= n._e11;
+	m._e12 -= n._e12;
+	m._e13 -= n._e13;
+	m._e14 -= n._e14;
+		   
+	m._e21 -= n._e21;
+	m._e22 -= n._e22;
+	m._e23 -= n._e23;
+	m._e24 -= n._e24;
+		   
+	m._e31 -= n._e31;
+	m._e32 -= n._e32;
+	m._e33 -= n._e33;
+	m._e34 -= n._e34;
+		   
+	m._e41 -= n._e41;
+	m._e42 -= n._e42;
+	m._e43 -= n._e43;
+	m._e44 -= n._e44;
+
 	return m;
 }
 
@@ -580,6 +701,27 @@ TMATRIX Matrix_Matrix_Sub(TMATRIX m, TMATRIX n)
 TMATRIX Matrix_Scalar_Multiply(TMATRIX m, float s)
 {
 	// TODO LAB 2: Replace with your implementation.
+
+	m._e11 *= s;
+	m._e12 *= s;
+	m._e13 *= s;
+	m._e14 *= s;
+		   	  
+	m._e21 *= s;
+	m._e22 *= s;
+	m._e23 *= s;
+	m._e24 *= s;
+		   	  
+	m._e31 *= s;
+	m._e32 *= s;
+	m._e33 *= s;
+	m._e34 *= s;
+		   	  
+	m._e41 *= s;
+	m._e42 *= s;
+	m._e43 *= s;
+	m._e44 *= s;
+
 	return m;
 }
 
@@ -591,6 +733,27 @@ TMATRIX Matrix_Scalar_Multiply(TMATRIX m, float s)
 TMATRIX Matrix_Negate(TMATRIX m)
 {
 	// TODO LAB 2: Replace with your implementation.
+
+	m._e11 *= -1;
+	m._e12 *= -1;
+	m._e13 *= -1;
+	m._e14 *= -1;
+			  
+	m._e21 *= -1;
+	m._e22 *= -1;
+	m._e23 *= -1;
+	m._e24 *= -1;
+			  
+	m._e31 *= -1;
+	m._e32 *= -1;
+	m._e33 *= -1;
+	m._e34 *= -1;
+			  
+	m._e41 *= -1;
+	m._e42 *= -1;
+	m._e43 *= -1;
+	m._e44 *= -1;
+
 	return m;
 }
 
@@ -602,6 +765,30 @@ TMATRIX Matrix_Negate(TMATRIX m)
 TMATRIX Matrix_Transpose(TMATRIX m)
 {
 	// TODO LAB 2: Replace with your implementation.
+
+	TMATRIX temp = m;
+
+	m._e11 = temp._e11;
+	m._e12 = temp._e21;
+	m._e13 = temp._e31;
+	m._e14 = temp._e41;
+
+	m._e21 = temp._e12;
+	m._e22 = temp._e22;
+	m._e23 = temp._e32;
+	m._e24 = temp._e42;
+
+	m._e31 = temp._e13;
+	m._e32 = temp._e23;
+	m._e33 = temp._e33;
+	m._e34 = temp._e43;
+
+	m._e41 = temp._e14;
+	m._e42 = temp._e24;
+	m._e43 = temp._e34;
+	m._e44 = temp._e44;
+
+
 	return m;
 }
 
@@ -614,7 +801,13 @@ TMATRIX Matrix_Transpose(TMATRIX m)
 TVECTOR Matrix_Vector_Multiply(TMATRIX m, TVECTOR v)
 {
 	// TODO LAB 2: Replace with your implementation.
-	return v;
+	TVECTOR temp;
+	temp.x = (m._e11 * v.x) + (m._e12 * v.y) + (m._e13 * v.z) + (m._e14 * v.w);
+	temp.y = (m._e21 * v.x) + (m._e22 * v.y) + (m._e23 * v.z) + (m._e24 * v.w);
+	temp.z = (m._e31 * v.x) + (m._e32 * v.y) + (m._e33 * v.z) + (m._e34 * v.w);
+	temp.w = (m._e41 * v.x) + (m._e42 * v.y) + (m._e43 * v.z) + (m._e44 * v.w);
+
+	return temp;
 }
 
 // Multipy a vector and a matrix
@@ -626,7 +819,14 @@ TVECTOR Matrix_Vector_Multiply(TMATRIX m, TVECTOR v)
 TVECTOR Vector_Matrix_Multiply(TVECTOR v, TMATRIX m)
 {
 	// TODO LAB 2: Replace with your implementation.
-	return v;
+
+	TVECTOR temp;
+	temp.x = (v.x * m._e11) + (v.y * m._e21) + (v.z * m._e31) + (v.w * m._e41);
+	temp.y = (v.x * m._e12) + (v.y * m._e22) + (v.z * m._e32) + (v.w * m._e42);
+	temp.z = (v.x * m._e13) + (v.y * m._e23) + (v.z * m._e33) + (v.w * m._e43);
+	temp.w = (v.x * m._e14) + (v.y * m._e24) + (v.z * m._e34) + (v.w * m._e44);
+
+	return temp;
 }
 // Multiply a matrix by a matrix
 //
@@ -637,7 +837,30 @@ TVECTOR Vector_Matrix_Multiply(TVECTOR v, TMATRIX m)
 TMATRIX Matrix_Matrix_Multiply(TMATRIX m, TMATRIX n)
 {
 	// TODO LAB 2: Replace with your implementation.
-	return m;
+	TMATRIX temp;
+
+	temp._e11 = (m._e11 * n._e11) + (m._e12 * n._e21) + (m._e13 * n._e31) + (m._e14 * n._e41);
+	temp._e12 = (m._e11 * n._e12) + (m._e12 * n._e22) + (m._e13 * n._e32) + (m._e14 * n._e42);
+	temp._e13 = (m._e11 * n._e13) + (m._e12 * n._e23) + (m._e13 * n._e33) + (m._e14 * n._e43);
+	temp._e14 = (m._e11 * n._e14) + (m._e12 * n._e24) + (m._e13 * n._e34) + (m._e14 * n._e44);
+
+	temp._e21 = (m._e21 * n._e11) + (m._e22 * n._e21) + (m._e23 * n._e31) + (m._e24 * n._e41);
+	temp._e22 = (m._e21 * n._e12) + (m._e22 * n._e22) + (m._e23 * n._e32) + (m._e24 * n._e42);
+	temp._e23 = (m._e21 * n._e13) + (m._e22 * n._e23) + (m._e23 * n._e33) + (m._e24 * n._e43);
+	temp._e24 = (m._e21 * n._e14) + (m._e22 * n._e24) + (m._e23 * n._e34) + (m._e24 * n._e44);
+
+	temp._e31 = (m._e31 * n._e11) + (m._e32 * n._e21) + (m._e33 * n._e31) + (m._e34 * n._e41);
+	temp._e32 = (m._e31 * n._e12) + (m._e32 * n._e22) + (m._e33 * n._e32) + (m._e34 * n._e42);
+	temp._e33 = (m._e31 * n._e13) + (m._e32 * n._e23) + (m._e33 * n._e33) + (m._e34 * n._e43);
+	temp._e34 = (m._e31 * n._e14) + (m._e32 * n._e24) + (m._e33 * n._e34) + (m._e34 * n._e44);
+
+	temp._e41 = (m._e41 * n._e11) + (m._e42 * n._e21) + (m._e43 * n._e31) + (m._e44 * n._e41);
+	temp._e42 = (m._e41 * n._e12) + (m._e42 * n._e22) + (m._e43 * n._e32) + (m._e44 * n._e42);
+	temp._e43 = (m._e41 * n._e13) + (m._e42 * n._e23) + (m._e43 * n._e33) + (m._e44 * n._e43);
+	temp._e44 = (m._e41 * n._e14) + (m._e42 * n._e24) + (m._e43 * n._e34) + (m._e44 * n._e44);
+
+
+	return temp;
 }
 
 ////////////////////////////////////////////////////////////////////////

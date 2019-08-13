@@ -16,7 +16,7 @@
 
 // SWITCH TO PICK WHICH FUNCTIONS TO CHECK
 enum { NOLAB, ALLLABS, LAB1, LAB2, LAB3 };
-static const int Switch = LAB1; 
+static const int Switch = LAB2; 
 
 
 // Methods.
